@@ -7,7 +7,7 @@
     tags:
     - install
     - dotfiles
-    - zsh
   tasks:
-  - include: tasks/zsh-setup.yaml
+  - include: tasks/kubectl.yaml
+  - include: tasks/zsh.yaml
   - include: tasks/dotfiles.yaml
