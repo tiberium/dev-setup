@@ -1,0 +1,45 @@
+- name: Install kubectl dependencies
+  apt:
+    pkg:
+    - apt-transport-https
+    - ca-certificates
+    - gnupg
+    update_cache: true
+  tags: &kubectl_tags [ 'install', 'dotfiles', 'kubectl', 'kubernetes', 'k8s' ]
+
+- name: Add k8s repo key
+  ansible.builtin.get_url:
+    url: https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key 
+    dest: /tmp/kubernetes-apt-keyring.gpg
+  tags: *kubectl_tags
+
+- name: Ensure the /etc/apt/keyrings exists
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  tags: *kubectl_tags
+
+- name: Install the k8s repo key
+  ansible.builtin.command:
+    cmd: gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg /tmp/kubernetes-apt-keyring.gpg
+  args:
+    creates: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+  tags: *kubectl_tags
+
+- name: Add k8s repository
+  ansible.builtin.apt_repository:
+    repo: 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /'
+    state: present
+    filename: kubernetes.list
+  tags: *kubectl_tags
+
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+  tags: *kubectl_tags
+
+- name: Install kubectl
+  apt:
+    name: kubectl
+  tags: *kubectl_tags
