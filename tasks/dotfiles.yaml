@@ -1,0 +1,27 @@
+- name: Install stow
+  apt: name=stow
+  tags: &stow_tags [ 'install', 'dotfiles', 'stow' ]
+- name: Clone dotfiles
+  ansible.builtin.git:
+    repo: git@github.com:tiberium/dotfiles.git
+    dest: "{{ lookup('env', 'HOME') }}/.dotfiles"
+    recursive: yes
+    update: yes
+    accept_hostkey: yes
+    version: main
+  tags: *stow_tags
+- name: Check that the .zshrc exists
+  stat:
+    path: $HOME/.zshrc
+  register: zshrc_file
+  tags: *stow_tags
+- name: Delete zshrc if exists
+  when: zshrc_file.stat.exists == True
+  shell: rm $HOME/.zshrc
+  tags: *stow_tags
+- name: Stow dotfiles
+  shell: |
+    cd $HOME/.dotfiles
+    stow nvim
+    stow zsh
+  tags: *stow_tags

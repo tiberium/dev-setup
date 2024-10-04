@@ -10,3 +10,4 @@
     - zsh
   tasks:
   - include: tasks/zsh-setup.yaml
+  - include: tasks/dotfiles.yaml
