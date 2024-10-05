@@ -13,21 +13,25 @@
   tags: *zsh_tags
 
 - name: Oh-My-Zsh
-  shell: curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh > ~/.oh-my-installer && chmod +x ~/.oh-my-installer && ~/.oh-my-installer
+  shell: curl -L https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh > ~/.oh-my-installer && chmod +x ~/.oh-my-installer && ~/.oh-my-installer
   when: oh_my_stats.stat.exists == False
+  tags: *zsh_tags
+
+- name: Download Spaceship
+  ansible.builtin.git:
+    repo: https://github.com/spaceship-prompt/spaceship-prompt.git
+    depth: 1
+    dest: "~/.oh-my-zsh/custom/themes/spaceship-prompt"
+  tags: *zsh_tags
+
+- name: Symlink spaceship.zsh-theme to oh-my-zsh custom themes directory
+  shell: ln -s ~/.oh-my-zsh/custom/themes/spaceship-prompt/spaceship.zsh-theme ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme
   tags: *zsh_tags
 
 - name: Install zsh-autosuggestions
   ansible.builtin.git:
     repo: https://github.com/zsh-users/zsh-autosuggestions.git
     dest: ~/.oh-my-zsh/plugins/zsh-autosuggestions
-  tags: *zsh_tags
-
-- name: Install powerlevel10k
-  ansible.builtin.git:
-    repo: https://github.com/romkatv/powerlevel10k.git
-    depth: 1
-    dest: "{{ lookup('env', 'HOME') }}/.oh-my-zsh/custom/themes/powerlevel10k"
   tags: *zsh_tags
 
 - name: Install syntax-highlighting
