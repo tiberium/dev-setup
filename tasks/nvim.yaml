@@ -1,0 +1,26 @@
+- name: Install Neovim dependencies
+  apt:
+    pkg:
+    - ninja-build
+    - gettext
+    - cmake
+    - unzip
+    - build-essential
+    update_cache: true
+  tags: &nvim_tags [ 'install', 'dotfiles', 'nvim', 'neovim' ]
+
+- name: Clone Neovim
+  ansible.builtin.git:
+    repo: 'https://github.com/neovim/neovim.git'
+    dest: "{{ lookup('env', 'HOME') }}/neovim"
+    version: v0.9.4
+  tags: *nvim_tags
+
+- name: Build Neovim
+  shell: "cd {{ lookup('env', 'HOME') }}/neovim && make -j 20"
+  tags: *nvim_tags
+
+- name: Install Neovim
+  become: true
+  shell: "cd {{ lookup('env', 'HOME') }}/neovim && make install"
+  tags: *nvim_tags
