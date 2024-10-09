@@ -40,3 +40,10 @@
     depth: 1
     dest: /usr/share/zsh-syntax-highlighting
   tags: *zsh_tags
+
+- name: Install spaceship_gitemail
+  ansible.builtin.git:
+    repo: https://github.com/tiberium/spaceship_gitemail.git
+    depth: 1
+    dest: ~/.oh-my-zsh/custom/plugins/spaceship_gitemail
+  tags: *zsh_tags
