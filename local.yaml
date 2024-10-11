@@ -9,6 +9,7 @@
     - dotfiles
   tasks:
   - include: tasks/kubectl.yaml
+  - include: tasks/go.yaml
   - include: tasks/nvim.yaml
   - include: tasks/zsh.yaml
   - include: tasks/dotfiles.yaml

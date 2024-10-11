@@ -1,0 +1,26 @@
+- name: Check that the /usr/local/go exists
+  stat:
+    path: /usr/local/go
+  register: go_path
+  tags: &go_tags [ 'install', 'dotfiles', 'go' ]
+
+- name: Delete /usr/local/go if exists
+  shell: rm -rf /usr/local/go
+  when: go_path.stat.exists == False
+  tags: *go_tags
+
+- name: Create /tmp/k9s/ dir
+  ansible.builtin.file:
+    state: directory
+    path: /tmp/go
+  tags: *go_tags
+
+- name: Download go archive
+  ansible.builtin.get_url:
+    url: https://go.dev/dl/go1.23.2.linux-arm64.tar.gz
+    dest: /tmp/go
+  tags: *go_tags
+
+- name: Unpack go to /usr/local
+  shell: tar -C /usr/local -xzf /tmp/go/go1.23.2.linux-arm64.tar.gz
+  tags: *go_tags
