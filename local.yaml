@@ -8,6 +8,7 @@
     - install
     - dotfiles
   tasks:
+  - include: tasks/tools.yaml
   - include: tasks/kubectl.yaml
   - include: tasks/go.yaml
   - include: tasks/nvim.yaml

@@ -1,0 +1,9 @@
+- name: Install tmux, fzf and some others
+  apt:
+    pkg:
+    - tmux
+    - fzf
+    - tldr
+    - bat
+    update_cache: true
+  tags: [ 'install', 'dotfiles', 'tools' ]
